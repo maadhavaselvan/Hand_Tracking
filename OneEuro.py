@@ -18,7 +18,7 @@ class OneEuro():
         self.previousTime=currentTime
     def alpha(self,f):
         t=(2*math.pi*f*self.T)
-        alpha=(t/1+t)
+        alpha=(t/(1+t))
         return alpha
     def filter(self,raw):
         c_raw=np.array(raw)

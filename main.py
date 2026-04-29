@@ -19,7 +19,7 @@ class HandTracking():
         self.mpDraw = mp.solutions.drawing_utils
         self.prevtime=time.time()
         self.euro_filter = OneEuro.OneEuro()
-        self.frameend=150
+        self.frameend=175
     def camerasetting(self):
         self.cap = cv2.VideoCapture(0)
         self.cap.set(3,640)
@@ -44,8 +44,8 @@ class HandTracking():
         return lmList
     def mousepointer(self,lmList):
         smooth = self.euro_filter.filter([lmList[8][0], lmList[8][1]])
-        screen_x = np.interp(smooth[0]*640,[self.frameend,640-self.frameend],[0,HandTracking.width])
-        screen_y = np.interp(smooth[1]*480, [self.frameend,480-self.frameend],[0,HandTracking.height])
+        screen_x = np.interp(smooth[0]*640,[self.frameend,640-self.frameend],[0,HandTracking.width-5])
+        screen_y = np.interp(smooth[1]*480, [self.frameend,480-self.frameend],[0,HandTracking.height-5])
         pyautogui.moveTo(int(screen_x),int(screen_y))
         distindexthumb=math.dist(lmList[8],lmList[4])
         distpalm=math.dist(lmList[9],lmList[0])
@@ -66,7 +66,8 @@ def main():
         img=detector.DrawHands(img)
         lmList=detector.findPosition(img)
         if len(lmList)>9:
-            detector.mousepointer(lmList)
+            if(math.dist(lmList[8], lmList[12])/(math.dist(lmList[9],lmList[0]))>0.33):
+                detector.mousepointer(lmList)
         if (cv2.waitKey(1) & 0xFF == ord('q')):
             break
     cv2.destroyAllWindows()
