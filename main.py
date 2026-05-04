@@ -73,7 +73,7 @@ def main():
         if len(lmList)>9:
             if(math.dist(lmList[8], lmList[12])/(math.dist(lmList[9],lmList[0]))>0.33):
                 detector.mousepointer(lmList)
-
+    cap.release()
     cv2.destroyAllWindows()
 if __name__=="__main__":
     main()
