@@ -2,7 +2,7 @@ import time
 import numpy as np
 import math
 class OneEuro():
-    def __init__(self,f_c_min=1,beta=0.4,f_c_min_vel=1):
+    def __init__(self,f_c_min=0.1,beta=0.007,f_c_min_vel=1):
         self.f_c_min = f_c_min  # min cutoff freq (Hz)
         self.beta = beta  # speed coefficient
         self.f_c_min_vel = f_c_min_vel  # derivative cutoff (Hz)
