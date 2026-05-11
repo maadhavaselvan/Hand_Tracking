@@ -20,7 +20,7 @@ class HandTracking():
         self.mpDraw = mp.solutions.drawing_utils
         self.prevtime=time.time()
         self.euro_filter = OneEuro.OneEuro()
-        self.frameend=100
+        self.frameend=80
     def camerasetting(self):
         self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
@@ -48,12 +48,10 @@ class HandTracking():
         screen_x = np.interp(lmList[8][0]*640,[self.frameend,640-self.frameend],[0,HandTracking.width-1])
         screen_y = np.interp(lmList[8][1]*480, [self.frameend,480-self.frameend],[0,HandTracking.height-1])
         smooth = self.euro_filter.filter([screen_x, screen_y])
+        smooth[0] = min(int(smooth[0]), HandTracking.width - 1)
+        smooth[1] = min(int(smooth[1]), HandTracking.height - 1)
         pyautogui.moveTo(int(smooth[0]),int(smooth[1]))
-        distindexthumb=math.dist(lmList[5],lmList[4])
-        distpalm=math.dist(lmList[9],lmList[0])
-        ratio=distindexthumb/distpalm
-        if(ratio<0.35 and ((time.time()-self.prevtime)>0.3)):
-            time.sleep(0.05)
+        if(lmList[3][1]<lmList[4][1]+0.0001 and ((time.time()-self.prevtime)>0.3)):
             pyautogui.click()
             self.prevtime=time.time()
             print("Click")
